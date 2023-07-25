@@ -5,70 +5,69 @@
 int _printf(const char *format, ...);
 
 /**
- * _printf - prints a formated string to output stream
- *  @format: the format string
+ * _printf - prints a formatted string to the output stream
+ * @format: the format string
  *
- *  Return: number of characters printed, otherwise (-1).
+ * Return: number of characters printed, otherwise (-1).
  */
-
 int _printf(const char *format, ...)
 {
-    int i = 0, l = 0, num;
-    char buffer[1024];
-    va_list args;
+	int index = 0, printed_chars = 0, num;
+	char buffer[1024];
+	va_list args;
 
-    if (!format)
-        return (-1);
+	if (!format)
+		return (-1);
 
-    va_start(args, format);
+	va_start(args, format);
 
-    while (format[i] != '\0')
-    {
-        if (format[i] == '%')
-        {
-            i++;
-            switch (format[i])
-            {
-                case 'c':
-                    l += _putchar(va_arg(args, int));
-                    break;
-                case '%':
-                    l += _putchar('%');
-                    break;
-                case 's':
-                    l += print(va_arg(args, char *));
-                    break;
-             :x   case 'd':
-                    num = va_arg(args, int);
-                    if (num == 0)
-                    {
-                        l += _putchar('0');
-                        break;
-                    }
-                    i_to_str(buffer, num);
-                    l += print(buffer);
-                    break;
-                case 'i':
-                    num = va_arg(args, int);
-                    if (num == 0)
-                    {
-                        l += _putchar('0');
-                        break;
-                    }
-                    i_to_str(buffer, num);
-                    l += print(buffer);
-                    break;
-                default:
-                    l += _putchar(format[i]);
-                    break;
-            }
-        }
-        else
-        {
-            l += _putchar(format[i]);
-        }
-        i++;
-    }
-    va_end(args);
-    return (l);
+	while (format[index] != '\0')
+	{
+		if (format[index] == '%')
+		{
+			index++;
+			switch (format[index])
+			{
+				case 'c':
+					printed_chars += putchar(va_arg(args, int));
+					break;
+				case '%':
+					printed_chars += putchar('%');
+					break;
+				case 's':
+					printed_chars += puts(va_arg(args, char *));
+					break;
+				case 'd':
+					num = va_arg(args, int);
+					if (num == 0)
+					{
+						printed_chars += putchar('0');
+						break;
+					}
+					snprintf(buffer, sizeof(buffer), "%d", num);
+					printed_chars += fputs(buffer, stdout);
+					break;
+				case 'i':
+					num = va_arg(args, int);
+					if (num == 0)
+					{
+						printed_chars += putchar('0');
+						break;
+					}
+					snprintf(buffer, sizeof(buffer), "%d", num);
+					printed_chars += fputs(buffer, stdout);
+					break;
+				default:
+					printed_chars += putchar(format[index]);
+					break;
+			}
+		}
+		else
+		{
+			printed_chars += putchar(format[index]);
+		}
+		index++;
+	}
+	va_end(args);
+	return (printed_chars);
 }
