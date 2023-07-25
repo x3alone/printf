@@ -12,62 +12,62 @@ int _printf(const char *format, ...);
 
 int _printf(const char *format, ...)
 {
-    int index = 0, j = 0, num;
+    int i = 0, l = 0, num;
     char buffer[1024];
-    va_list arguments;
+    va_list args;
 
     if (!format)
         return (-1);
 
-    va_start(arguments, format);
+    va_start(args, format);
 
-    while (format[index] != '\0')
+    while (format[i] != '\0')
     {
-        if (format[index] == '%')
+        if (format[i] == '%')
         {
-            index++;
-            switch (format[index])
+            i++;
+            switch (format[i])
             {
                 case 'c':
-                    j += _putchar(va_arg(arguments, int));
+                    l += _putchar(va_arg(args, int));
                     break;
                 case '%':
-                    j += _putchar('%');
+                    l += _putchar('%');
                     break;
                 case 's':
-                    j += print(va_arg(arguments, char *));
+                    l += print(va_arg(args, char *));
                     break;
-                case 'd':
-                    num = va_arg(arguments, int);
+             :x   case 'd':
+                    num = va_arg(args, int);
                     if (num == 0)
                     {
-                        j += _putchar('0');
+                        l += _putchar('0');
                         break;
                     }
                     i_to_str(buffer, num);
-                    j += print(buffer);
+                    l += print(buffer);
                     break;
-                case 'index':
-                    num = va_arg(arguments, int);
+                case 'i':
+                    num = va_arg(args, int);
                     if (num == 0)
                     {
-                        j += _putchar('0');
+                        l += _putchar('0');
                         break;
                     }
                     i_to_str(buffer, num);
-                    j += print(buffer);
+                    l += print(buffer);
                     break;
                 default:
-                    j += _putchar(format[index]);
+                    l += _putchar(format[i]);
                     break;
             }
         }
         else
         {
-            j += _putchar(format[index]);
+            l += _putchar(format[i]);
         }
-        index++;
+        i++;
     }
-    va_end(argument);
-    return (j);
+    va_end(args);
+    return (l);
 }
