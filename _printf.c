@@ -1,73 +1,73 @@
 #include "main.h"
+#include <stdio.h>
 #include <stdarg.h>
 
 int _printf(const char *format, ...);
 
 /**
- * _printf - prints a formated string to output stream
- *  @format: the format string
+ * _printf - prints a formatted string to the output stream
+ * @format: the format string
  *
- *  Return: number of characters printed, if not return (-1).
+ * Return: number of characters printed, otherwise (-1).
  */
-
 int _printf(const char *format, ...)
 {
-    int i = 0, y = 0, num;
-    char buffer[1024];
-    va_list arguments;
+	int index = 0, printed_chars = 0, num;
+	char buffer[1024];
+	va_list args;
 
-    if (format == NULL)
-        return (-1);
+	if (!format)
+		return (-1);
 
-    va_start(argarguments, format);
+	va_start(args, format);
 
-    while (format[i] != '\0')
-    {
-        if (format[i] == '%')
-        {
-            i++;
-            switch (format[i])
-            {
-                case 'c':
-                    y += _putchar(va_arg(arguments, int));
-                    break;
-                case '%':
-                    y += _putchar('%');
-                    break;
-                case 's':
-                   y += print(va_arg(arguments, char *));
-                    break;
-                case 'd':
-                    num = va_arg(arguments, int);
-                    if (num == 0)
-                    {
-                        y += _putchar('0');
-                        break;
-                    }
-                    i_to_str(buffer, num);
-                    y += print(buffer);
-                    break;
-                case 'i':
-                    num = va_arg(arguments, int);
-                    if (!num)
-                    {
-                        y += _putchar('0');
-                        break;
-                    }
-                    i_to_str(buffer, num);
-                    y += print(buffer);
-                    break;
-                default:
-                    y += _putchar(format[i]);
-                    break;
-            }
-        }
-        else
-        {
-            y += _putchar(format[i]);
-        }
-        i++;
-    }
-    va_end(arguments);
-    return (y);
+	while (format[index] != '\0')
+	{
+		if (format[index] == '%')
+		{
+			index++;
+			switch (format[index])
+			{
+				case 'c':
+					printed_chars += putchar(va_arg(args, int));
+					break;
+				case '%':
+					printed_chars += putchar('%');
+					break;
+				case 's':
+					printed_chars += puts(va_arg(args, char *));
+					break;
+				case 'd':
+					num = va_arg(args, int);
+					if (num == 0)
+					{
+						printed_chars += putchar('0');
+						break;
+					}
+					snprintf(buffer, sizeof(buffer), "%d", num);
+					printed_chars += fputs(buffer, stdout);
+					break;
+				case 'i':
+					num = va_arg(args, int);
+					if (num == 0)
+					{
+						printed_chars += putchar('0');
+						break;
+					}
+					snprintf(buffer, sizeof(buffer), "%d", num);
+					printed_chars += fputs(buffer, stdout);
+					break;
+				default:
+					printed_chars += putchar(format[index]);
+					break;
+			}
+		}
+		else
+		{
+			printed_chars += putchar(format[index]);
+		}
+		index++;
+	}
+	va_end(args);
+	return (printed_chars);
 }
