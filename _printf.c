@@ -1,72 +1,80 @@
-#include <stdio.h>
 #include <stdarg.h>
+#include <unistd.h>
+#include <stdio.h>
+/**
+ * _putchar - writes a single char
+ * @c: the character it prints
+ * Return: the number of characters written (1)
+ */
+int _putchar(char c)
+{
+	return (write(1, &c, 1));
+}
+/**
+ * handle_string - prints string
+ * @str: takes a pointer to a sting
+ * Return: the number of characters printed.
+ */
+int handle_string(char *str)
+{
+	int i = 0;
 
-int _printf(const char *format, ...);
-
+	if (str == NULL)
+	{
+		handle_string("(null)");
+		return (i);
+	}
+	while (str[i])
+	{
+		_putchar(str[i]);
+		i++; }
+	return (i);
+}
 /**
  * _printf - prints a formatted string to the output stream
  * @format: the format string
- *
- * Return: number of characters printed, otherwise (-1).
+ * Return: number of characters printed, otherwise return (-1)
  */
 int _printf(const char *format, ...)
 {
-	int index = 0, printed_chars = 0, num;
-	char buffer[1024];
+	unsigned int i, count = 0;
 	va_list args;
 
-	if (!format)
-		return (-1);
-
 	va_start(args, format);
-
-	while (format[index] != '\0')
+	if (!format || (format[0] == '%' && format[1] == '\0'))
+		return (-1);
+	for (i = 0; format[i] != '\0'; i++)
 	{
-		if (format[index] == '%')
+		if (format[i] == '%')
 		{
-			index++;
-			switch (format[index])
+			i++;
+			if (format[i] == 'c')
 			{
-				case 'c':
-					printed_chars += putchar(va_arg(args, int));
-					break;
-				case '%':
-					printed_chars += putchar('%');
-					break;
-				case 's':
-					printed_chars += puts(va_arg(args, char *));
-					break;
-				case 'd':
-					num = va_arg(args, int);
-					if (num == 0)
-					{
-						printed_chars += putchar('0');
-						break;
-					}
-					snprintf(buffer, sizeof(buffer), "%d", num);
-					printed_chars += fputs(buffer, stdout);
-					break;
-				case 'i':
-					num = va_arg(args, int);
-					if (num == 0)
-					{
-						printed_chars += putchar('0');
-						break;
-					}
-					snprintf(buffer, sizeof(buffer), "%d", num);
-					printed_chars += fputs(buffer, stdout);
-					break;
-				default:
-					printed_chars += putchar(format[index]);
-					break;
+				char c = va_arg(args, int);
+
+				count += _putchar(c);
+			}
+			else if (format[i] == 's')
+			{
+				char *str = va_arg(args, char *);
+
+				count += handle_string(str);
+			}
+			else if (format[i] == '%')
+			{
+				_putchar('%');
+				count++;
+			}
+			else
+			{
+				_putchar('%');
+				_putchar(format[i]);
+				count += 2;
 			}
 		}
 		else
 		{
-			printed_chars += putchar(format[index]);
-		}
-		index++;
+			_putchar(format[i]);
+			count++; }
 	}
-	va_end(args);
-	return (printed_chars);
-}
+	va_end(args); }
